@@ -15,7 +15,7 @@ jobs:
 
       - name: Run poller
         env:
-          TELEGRAM_TOKEN: ${{ secrets.8386163214:AAERyUT9rJ0CKeDTxIyscswQCsIfaNrnakM }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: "238376703"
           TZ: "Asia/Manila"
         run: |
