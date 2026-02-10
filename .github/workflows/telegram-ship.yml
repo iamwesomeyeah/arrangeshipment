@@ -1,0 +1,44 @@
+name: Telegram Ship Poller
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # every 5 minutes
+  workflow_dispatch:
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run poller
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.8386163214:AAERyUT9rJ0CKeDTxIyscswQCsIfaNrnakM }}
+          CHAT_ID: "238376703"
+          TZ: "Asia/Manila"
+        run: |
+          python - << 'EOF'
+          from datetime import datetime
+          import os
+          import requests
+          import pytz
+
+          tz = pytz.timezone(os.getenv("TZ"))
+          now = datetime.now(tz)
+
+          if now.hour < 19:
+              print("Before 7 PM. Exiting.")
+              exit(0)
+
+          token = os.getenv("TELEGRAM_TOKEN")
+          chat_id = os.getenv("CHAT_ID")
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+          msg = "Polling active. Ready to ship after 7 PM."
+
+          requests.post(url, data={"chat_id": chat_id, "text": msg})
+          print("Message sent.")
+          EOF
+
